@@ -1,0 +1,2657 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>HELIOS Hospital Command Center</title>
+
+
+    <style>
+
+        /* =========================================
+           GLOBAL
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f7fb;
+
+            color: #1f2937;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        header {
+
+            background: #0f172a;
+
+            color: white;
+
+            padding: 22px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .logo {
+
+            font-size: 25px;
+
+            font-weight: bold;
+        }
+
+
+        .online {
+
+            background: #166534;
+
+            padding: 8px 14px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1400px;
+
+            margin: 30px auto;
+        }
+
+
+        /* =========================================
+           PAGE TITLE
+        ========================================= */
+
+        .page-title {
+
+            margin-bottom: 25px;
+        }
+
+
+        .page-title h1 {
+
+            margin-bottom: 8px;
+
+            font-size: 30px;
+        }
+
+
+        .page-title p {
+
+            color: #64748b;
+
+            margin: 0;
+        }
+
+
+        /* =========================================
+           RESOURCE CARDS
+        ========================================= */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .card {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.06);
+        }
+
+
+        .card-title {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 10px;
+
+            font-weight: bold;
+        }
+
+
+        .card-value {
+
+            font-size: 32px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================
+           PANELS
+        ========================================= */
+
+        .panel {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.06);
+        }
+
+
+        .panel h2 {
+
+            margin-top: 0;
+
+            color: #0f172a;
+        }
+
+
+        /* =========================================
+           EMERGENCY GRID
+        ========================================= */
+
+        .emergency-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .metric {
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+
+            padding: 18px;
+        }
+
+
+        .metric-name {
+
+            display: block;
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .metric-value {
+
+            font-size: 27px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================
+           BUTTONS
+        ========================================= */
+
+        .buttons {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 20px;
+
+            flex-wrap: wrap;
+        }
+
+
+        button {
+
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        button:hover {
+
+            opacity: 0.88;
+
+            transform: translateY(-1px);
+        }
+
+
+        .surge-btn {
+
+            background: #dc2626;
+
+            color: white;
+        }
+
+
+        .optimize-btn {
+
+            background: #2563eb;
+
+            color: white;
+        }
+
+
+        .reset-btn {
+
+            background: #64748b;
+
+            color: white;
+        }
+
+
+        .run-btn {
+
+            background: #7c3aed;
+
+            color: white;
+
+            margin-top: 20px;
+
+            padding: 14px 25px;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================================
+           WHAT-IF SIMULATOR
+        ========================================= */
+
+        .simulator-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+
+            margin-top: 20px;
+        }
+
+
+        .input-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+
+        .input-group label {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #475569;
+        }
+
+
+        .input-group input {
+
+            padding: 12px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+
+        .input-group input:focus {
+
+            border-color: #7c3aed;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(124, 58, 237, 0.1);
+        }
+
+
+        /* =========================================
+           DECISION CENTER
+        ========================================= */
+
+        .status-box {
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            background: #f8fafc;
+
+            margin-top: 20px;
+        }
+
+
+        .status-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 11px 0;
+
+            border-bottom:
+                1px solid #e2e8f0;
+        }
+
+
+        .status-row:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .status-label {
+
+            color: #64748b;
+        }
+
+
+        .status-value {
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================
+           RECOMMENDATIONS
+        ========================================= */
+
+        .recommendation {
+
+            border-left:
+                5px solid #2563eb;
+
+            background: #eff6ff;
+
+            padding: 16px;
+
+            margin-top: 12px;
+
+            border-radius: 7px;
+
+            line-height: 1.6;
+        }
+
+
+        .recommendation strong {
+
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #0f172a;
+        }
+
+
+        .recommendation .quantity {
+
+            font-size: 18px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================
+           BEFORE / AFTER
+        ========================================= */
+
+        .comparison {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+
+            margin-top: 20px;
+        }
+
+
+        .comparison-box {
+
+            background: #f8fafc;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            border: 1px solid #e2e8f0;
+        }
+
+
+        .comparison-box h3 {
+
+            margin-top: 0;
+
+            color: #0f172a;
+        }
+
+
+        .comparison-box p {
+
+            padding: 7px 0;
+
+            margin: 0;
+        }
+
+
+        /* =========================================
+           ALLOCATION SUMMARY
+        ========================================= */
+
+        .allocation-summary {
+
+            margin-top: 20px;
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            background: #f8fafc;
+        }
+
+
+        .allocation-summary h3 {
+
+            margin-top: 0;
+        }
+
+
+        .allocation-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 10px 0;
+
+            border-bottom:
+                1px solid #e2e8f0;
+        }
+
+
+        .allocation-row:last-child {
+
+            border-bottom: none;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 1000px) {
+
+            .cards {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .emergency-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .cards {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .emergency-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .simulator-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .comparison {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            header {
+
+                padding: 20px;
+
+                flex-direction: column;
+
+                gap: 12px;
+
+                align-items: flex-start;
+            }
+
+
+            .container {
+
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header>
+
+    <div class="logo">
+
+        🏥 HELIOS —
+        Hospital Command Center
+
+    </div>
+
+
+    <div class="online">
+
+        ● SYSTEM ONLINE
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN CONTAINER
+========================================= -->
+
+<div class="container">
+
+
+    <!-- =====================================
+         PAGE TITLE
+    ====================================== -->
+
+    <div class="page-title">
+
+        <h1>
+
+            Real-Time Hospital
+            Resource Management
+
+        </h1>
+
+
+        <p>
+
+            Monitor hospital conditions,
+            simulate emergencies,
+            and optimize resources.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================
+         RESOURCE OVERVIEW
+    ====================================== -->
+
+    <div class="cards">
+
+
+        <!-- TOTAL BEDS -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                TOTAL BEDS
+
+            </div>
+
+
+            <div
+                class="card-value"
+                id="totalBeds">
+
+                --
+
+            </div>
+
+        </div>
+
+
+
+        <!-- DOCTORS -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                DOCTORS
+
+            </div>
+
+
+            <div
+                class="card-value"
+                id="totalDoctors">
+
+                --
+
+            </div>
+
+        </div>
+
+
+
+        <!-- NURSES -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                NURSES
+
+            </div>
+
+
+            <div
+                class="card-value"
+                id="totalNurses">
+
+                --
+
+            </div>
+
+        </div>
+
+
+
+        <!-- VENTILATORS -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                VENTILATORS
+
+            </div>
+
+
+            <div
+                class="card-value"
+                id="totalVentilators">
+
+                --
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================
+         EMERGENCY DEPARTMENT
+    ====================================== -->
+
+    <div class="panel">
+
+
+        <h2>
+
+            🚨 Emergency Department
+
+        </h2>
+
+
+        <div class="emergency-grid">
+
+
+            <!-- PATIENTS -->
+
+            <div class="metric">
+
+                <span class="metric-name">
+
+                    Current Patients
+
+                </span>
+
+
+                <span
+                    class="metric-value"
+                    id="emergencyPatients">
+
+                    --
+
+                </span>
+
+            </div>
+
+
+
+            <!-- ARRIVALS -->
+
+            <div class="metric">
+
+                <span class="metric-name">
+
+                    Arrivals / Hour
+
+                </span>
+
+
+                <span
+                    class="metric-value"
+                    id="emergencyArrivals">
+
+                    --
+
+                </span>
+
+            </div>
+
+
+
+            <!-- BEDS -->
+
+            <div class="metric">
+
+                <span class="metric-name">
+
+                    Available Beds
+
+                </span>
+
+
+                <span
+                    class="metric-value"
+                    id="emergencyBeds">
+
+                    --
+
+                </span>
+
+            </div>
+
+
+
+            <!-- DOCTORS -->
+
+            <div class="metric">
+
+                <span class="metric-name">
+
+                    Available Doctors
+
+                </span>
+
+
+                <span
+                    class="metric-value"
+                    id="emergencyDoctors">
+
+                    --
+
+                </span>
+
+            </div>
+
+
+
+            <!-- NURSES -->
+
+            <div class="metric">
+
+                <span class="metric-name">
+
+                    Available Nurses
+
+                </span>
+
+
+                <span
+                    class="metric-value"
+                    id="emergencyNurses">
+
+                    --
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- CONTROL BUTTONS -->
+
+        <div class="buttons">
+
+
+            <button
+                class="surge-btn"
+                onclick="simulateSurge()">
+
+                🚨 SIMULATE SURGE
+
+            </button>
+
+
+            <button
+                class="optimize-btn"
+                onclick="optimizeResources()">
+
+                ⚙ OPTIMIZE
+
+            </button>
+
+
+            <button
+                class="reset-btn"
+                onclick="resetHospital()">
+
+                ↻ RESET
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         WHAT-IF SIMULATOR
+    ====================================== -->
+
+    <div class="panel">
+
+
+        <h2>
+
+            🔬 What-If Simulator
+
+        </h2>
+
+
+        <p>
+
+            Change hospital conditions
+            and see how HELIOS responds.
+
+        </p>
+
+
+
+        <div class="simulator-grid">
+
+
+            <!-- PATIENTS -->
+
+            <div class="input-group">
+
+                <label for="scenarioPatients">
+
+                    Emergency Patients
+
+                </label>
+
+
+                <input
+                    type="number"
+                    id="scenarioPatients"
+                    value="70"
+                    min="0">
+
+            </div>
+
+
+
+            <!-- ARRIVALS -->
+
+            <div class="input-group">
+
+                <label for="scenarioArrivals">
+
+                    Arrivals / Hour
+
+                </label>
+
+
+                <input
+                    type="number"
+                    id="scenarioArrivals"
+                    value="20"
+                    min="0">
+
+            </div>
+
+
+
+            <!-- BEDS -->
+
+            <div class="input-group">
+
+                <label for="scenarioBeds">
+
+                    Available Beds
+
+                </label>
+
+
+                <input
+                    type="number"
+                    id="scenarioBeds"
+                    value="5"
+                    min="0">
+
+            </div>
+
+
+
+            <!-- DOCTORS -->
+
+            <div class="input-group">
+
+                <label for="scenarioDoctors">
+
+                    Available Doctors
+
+                </label>
+
+
+                <input
+                    type="number"
+                    id="scenarioDoctors"
+                    value="3"
+                    min="0">
+
+            </div>
+
+
+
+            <!-- NURSES -->
+
+            <div class="input-group">
+
+                <label for="scenarioNurses">
+
+                    Available Nurses
+
+                </label>
+
+
+                <input
+                    type="number"
+                    id="scenarioNurses"
+                    value="6"
+                    min="0">
+
+            </div>
+
+
+
+            <!-- VENTILATORS -->
+
+            <div class="input-group">
+
+                <label for="scenarioVentilators">
+
+                    Available Ventilators
+
+                </label>
+
+
+                <input
+                    type="number"
+                    id="scenarioVentilators"
+                    value="4"
+                    min="0">
+
+            </div>
+
+
+        </div>
+
+
+
+        <button
+            class="run-btn"
+            onclick="runScenario()">
+
+            🔬 RUN SCENARIO
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- =====================================
+         DECISION CENTER
+    ====================================== -->
+
+    <div class="panel">
+
+
+        <h2>
+
+            🧠 HELIOS Decision Center
+
+        </h2>
+
+
+        <div
+            class="status-box"
+            id="decisionStatus">
+
+            Waiting for scenario analysis...
+
+        </div>
+
+
+        <div id="recommendations">
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================
+         BEFORE / AFTER
+    ====================================== -->
+
+    <div class="panel">
+
+
+        <h2>
+
+            📊 Resource Impact
+
+        </h2>
+
+
+        <div
+            class="comparison"
+            id="comparison">
+
+
+            <!-- BEFORE -->
+
+            <div class="comparison-box">
+
+                <h3>
+
+                    Before Optimization
+
+                </h3>
+
+
+                <p>
+
+                    Run a scenario to see
+                    resource impact.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- AFTER -->
+
+            <div class="comparison-box">
+
+                <h3>
+
+                    After HELIOS Allocation
+
+                </h3>
+
+
+                <p>
+
+                    HELIOS recommendations
+                    will appear here.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         RESOURCE ALLOCATION DETAILS
+    ====================================== -->
+
+    <div class="panel">
+
+
+        <h2>
+
+            🔄 Resource Allocation Flow
+
+        </h2>
+
+
+        <div
+            class="allocation-summary"
+            id="allocationSummary">
+
+            <h3>
+
+                No allocation performed yet.
+
+            </h3>
+
+
+            <p>
+
+                Run a What-If Scenario to
+                calculate resource movement.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer>
+
+    HELIOS —
+    Hospital Emergency Logistics &
+    Intelligent Optimization System
+
+</footer>
+
+
+
+<script>
+
+
+// =================================================
+// API CONFIGURATION
+// =================================================
+
+const API =
+    "http://127.0.0.1:5000";
+
+
+
+// =================================================
+// LOAD DASHBOARD
+// =================================================
+
+async function loadDashboard() {
+
+    try {
+
+
+        const response =
+            await fetch(
+                API + "/api/dashboard"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Dashboard API failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const hospital =
+            data.hospital;
+
+
+        // -------------------------------
+        // TOTAL RESOURCES
+        // -------------------------------
+
+        document.getElementById(
+            "totalBeds"
+        ).textContent =
+            hospital.beds;
+
+
+        document.getElementById(
+            "totalDoctors"
+        ).textContent =
+            hospital.doctors;
+
+
+        document.getElementById(
+            "totalNurses"
+        ).textContent =
+            hospital.nurses;
+
+
+        document.getElementById(
+            "totalVentilators"
+        ).textContent =
+            hospital.ventilators;
+
+
+        // -------------------------------
+        // EMERGENCY
+        // -------------------------------
+
+        document.getElementById(
+            "emergencyPatients"
+        ).textContent =
+            hospital.emergency_patients;
+
+
+        document.getElementById(
+            "emergencyArrivals"
+        ).textContent =
+            hospital.emergency_arrivals;
+
+
+        document.getElementById(
+            "emergencyBeds"
+        ).textContent =
+            hospital.emergency_beds;
+
+
+        document.getElementById(
+            "emergencyDoctors"
+        ).textContent =
+            hospital.emergency_doctors;
+
+
+        document.getElementById(
+            "emergencyNurses"
+        ).textContent =
+            hospital.emergency_nurses;
+
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard Error:",
+            error
+        );
+
+
+        document.getElementById(
+            "decisionStatus"
+        ).innerHTML = `
+
+            ⚠️
+            Could not connect to HELIOS backend.
+
+            <br><br>
+
+            Make sure Flask is running.
+
+        `;
+
+    }
+
+}
+
+
+
+// =================================================
+// SIMULATE SURGE
+// =================================================
+
+async function simulateSurge() {
+
+    try {
+
+
+        const response =
+            await fetch(
+                API + "/api/simulate",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Surge API failed"
+            );
+
+        }
+
+
+        await response.json();
+
+
+        await loadDashboard();
+
+
+        document.getElementById(
+            "decisionStatus"
+        ).innerHTML = `
+
+            <div class="status-row">
+
+                <span class="status-label">
+                    Hospital Event
+                </span>
+
+                <span class="status-value">
+                    🚨 Emergency Surge Simulated
+                </span>
+
+            </div>
+
+
+            <div class="status-row">
+
+                <span class="status-label">
+                    Action
+                </span>
+
+                <span class="status-value">
+                    Run optimization
+                </span>
+
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "recommendations"
+        ).innerHTML = "";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "Could not connect to HELIOS backend."
+        );
+
+    }
+
+}
+
+
+
+// =================================================
+// BASIC OPTIMIZATION BUTTON
+// =================================================
+
+async function optimizeResources() {
+
+    try {
+
+
+        const response =
+            await fetch(
+                API + "/api/optimize",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Optimization API failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        displayBasicRecommendations(
+            data
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "Optimization request failed."
+        );
+
+    }
+
+}
+
+
+
+// =================================================
+// BASIC RECOMMENDATIONS
+// =================================================
+
+function displayBasicRecommendations(data) {
+
+    const container =
+        document.getElementById(
+            "recommendations"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const status =
+        document.getElementById(
+            "decisionStatus"
+        );
+
+
+    status.innerHTML = `
+
+        <div class="status-row">
+
+            <span class="status-label">
+                System Status
+            </span>
+
+            <span class="status-value">
+                ${data.status}
+            </span>
+
+        </div>
+
+    `;
+
+
+    data.recommendations.forEach(
+        recommendation => {
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "recommendation";
+
+
+            div.innerHTML = `
+
+                <strong>
+
+                    ${recommendation.from}
+                    →
+                    ${recommendation.to}
+
+                </strong>
+
+
+                Resource:
+                ${recommendation.resource}
+
+                <br>
+
+
+                Quantity:
+                <span class="quantity">
+
+                    ${recommendation.quantity}
+
+                </span>
+
+            `;
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+
+// =================================================
+// RUN WHAT-IF SCENARIO
+// =================================================
+
+async function runScenario() {
+
+
+    // ---------------------------------------------
+    // READ INPUTS
+    // ---------------------------------------------
+
+    const patients =
+        Number(
+            document.getElementById(
+                "scenarioPatients"
+            ).value
+        );
+
+
+    const arrivals =
+        Number(
+            document.getElementById(
+                "scenarioArrivals"
+            ).value
+        );
+
+
+    const beds =
+        Number(
+            document.getElementById(
+                "scenarioBeds"
+            ).value
+        );
+
+
+    const doctors =
+        Number(
+            document.getElementById(
+                "scenarioDoctors"
+            ).value
+        );
+
+
+    const nurses =
+        Number(
+            document.getElementById(
+                "scenarioNurses"
+            ).value
+        );
+
+
+    const ventilators =
+        Number(
+            document.getElementById(
+                "scenarioVentilators"
+            ).value
+        );
+
+
+
+    // ---------------------------------------------
+    // VALIDATION
+    // ---------------------------------------------
+
+    if (
+        patients < 0 ||
+        arrivals < 0 ||
+        beds < 0 ||
+        doctors < 0 ||
+        nurses < 0 ||
+        ventilators < 0
+    ) {
+
+        alert(
+            "Values cannot be negative."
+        );
+
+        return;
+
+    }
+
+
+
+    // ---------------------------------------------
+    // SCENARIO OBJECT
+    // ---------------------------------------------
+
+    const scenario = {
+
+        patients:
+            patients,
+
+        arrivals:
+            arrivals,
+
+        beds:
+            beds,
+
+        doctors:
+            doctors,
+
+        nurses:
+            nurses,
+
+        ventilators:
+            ventilators
+
+    };
+
+
+
+    // ---------------------------------------------
+    // SEND TO FLASK
+    // ---------------------------------------------
+
+    try {
+
+
+        const response =
+            await fetch(
+                API + "/api/scenario",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            scenario
+                        )
+
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Scenario API failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        // -----------------------------------------
+        // DISPLAY RESULTS
+        // -----------------------------------------
+
+        displayScenarioResult(
+            data
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Scenario Error:",
+            error
+        );
+
+
+        alert(
+            "Could not connect to HELIOS backend."
+        );
+
+    }
+
+}
+
+
+
+// =================================================
+// DISPLAY SCENARIO RESULT
+// =================================================
+
+function displayScenarioResult(data) {
+
+
+    const status =
+        document.getElementById(
+            "decisionStatus"
+        );
+
+
+    // ---------------------------------------------
+    // STATUS
+    // ---------------------------------------------
+
+    status.innerHTML = `
+
+        <div class="status-row">
+
+            <span class="status-label">
+                Surge Status
+            </span>
+
+            <span class="status-value">
+                ${data.surge_status}
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span class="status-label">
+                Resource Status
+            </span>
+
+            <span class="status-value">
+                ${data.resource_status}
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span class="status-label">
+                Bed Deficit
+            </span>
+
+            <span class="status-value">
+                ${data.deficit.beds}
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span class="status-label">
+                Doctor Deficit
+            </span>
+
+            <span class="status-value">
+                ${data.deficit.doctors}
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span class="status-label">
+                Nurse Deficit
+            </span>
+
+            <span class="status-value">
+                ${data.deficit.nurses}
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span class="status-label">
+                Ventilator Deficit
+            </span>
+
+            <span class="status-value">
+                ${data.deficit.ventilators}
+            </span>
+
+        </div>
+
+    `;
+
+
+    // ---------------------------------------------
+    // ALLOCATIONS
+    // ---------------------------------------------
+
+    displayAllocations(
+        data.allocations
+    );
+
+
+    // ---------------------------------------------
+    // BEFORE / AFTER
+    // ---------------------------------------------
+
+    displayComparison(
+        data
+    );
+
+
+    // ---------------------------------------------
+    // ALLOCATION FLOW
+    // ---------------------------------------------
+
+    displayAllocationFlow(
+        data
+    );
+
+}
+
+
+
+// =================================================
+// DISPLAY ALLOCATIONS
+// =================================================
+
+function displayAllocations(
+    allocations
+) {
+
+
+    const container =
+        document.getElementById(
+            "recommendations"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (
+        !allocations ||
+        allocations.length === 0
+    ) {
+
+
+        container.innerHTML = `
+
+            <div class="recommendation">
+
+                <strong>
+
+                    No Reallocation Required
+
+                </strong>
+
+
+                Current resources are
+                sufficient.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    allocations.forEach(
+        allocation => {
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "recommendation";
+
+
+            div.innerHTML = `
+
+                <strong>
+
+                    ${allocation.from}
+                    →
+                    ${allocation.to}
+
+                </strong>
+
+
+                Resource:
+                ${allocation.resource}
+
+                <br>
+
+
+                Quantity:
+                <span class="quantity">
+
+                    ${allocation.quantity}
+
+                </span>
+
+                <br>
+
+
+                Reason:
+                ${allocation.reason}
+
+            `;
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+
+// =================================================
+// BEFORE / AFTER COMPARISON
+// =================================================
+
+function displayComparison(data) {
+
+
+    const comparison =
+        document.getElementById(
+            "comparison"
+        );
+
+
+    // ---------------------------------------------
+    // CALCULATE RESOURCES AFTER ALLOCATION
+    // ---------------------------------------------
+
+    const totalBedsAfter =
+        data.scenario.beds +
+        data.deficit.beds -
+        data.unresolved.beds;
+
+
+    const totalDoctorsAfter =
+        data.scenario.doctors +
+        data.deficit.doctors -
+        data.unresolved.doctors;
+
+
+    const totalNursesAfter =
+        data.scenario.nurses +
+        data.deficit.nurses -
+        data.unresolved.nurses;
+
+
+    const totalVentilatorsAfter =
+        data.scenario.ventilators;
+
+
+
+    // ---------------------------------------------
+    // DISPLAY
+    // ---------------------------------------------
+
+    comparison.innerHTML = `
+
+        <!-- BEFORE -->
+
+        <div class="comparison-box">
+
+            <h3>
+
+                🔴 Before Optimization
+
+            </h3>
+
+
+            <p>
+
+                Emergency Patients:
+
+                <strong>
+
+                    ${data.scenario.patients}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Available Beds:
+
+                <strong>
+
+                    ${data.scenario.beds}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Available Doctors:
+
+                <strong>
+
+                    ${data.scenario.doctors}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Available Nurses:
+
+                <strong>
+
+                    ${data.scenario.nurses}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Available Ventilators:
+
+                <strong>
+
+                    ${data.scenario.ventilators}
+
+                </strong>
+
+            </p>
+
+        </div>
+
+
+
+        <!-- AFTER -->
+
+        <div class="comparison-box">
+
+            <h3>
+
+                🟢 After HELIOS Allocation
+
+            </h3>
+
+
+            <p>
+
+                Emergency Beds:
+
+                <strong>
+
+                    ${totalBedsAfter}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Emergency Doctors:
+
+                <strong>
+
+                    ${totalDoctorsAfter}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Emergency Nurses:
+
+                <strong>
+
+                    ${totalNursesAfter}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Ventilators:
+
+                <strong>
+
+                    ${totalVentilatorsAfter}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Remaining Bed Deficit:
+
+                <strong>
+
+                    ${data.unresolved.beds}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Remaining Doctor Deficit:
+
+                <strong>
+
+                    ${data.unresolved.doctors}
+
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Remaining Nurse Deficit:
+
+                <strong>
+
+                    ${data.unresolved.nurses}
+
+                </strong>
+
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+
+// =================================================
+// RESOURCE ALLOCATION FLOW
+// =================================================
+
+function displayAllocationFlow(data) {
+
+
+    const container =
+        document.getElementById(
+            "allocationSummary"
+        );
+
+
+    if (
+        !data.allocations ||
+        data.allocations.length === 0
+    ) {
+
+
+        container.innerHTML = `
+
+            <h3>
+
+                No Allocation Required
+
+            </h3>
+
+
+            <p>
+
+                The current resources are
+                sufficient for this scenario.
+
+            </p>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    let html = `
+
+        <h3>
+
+            HELIOS Recommended Resource Movement
+
+        </h3>
+
+    `;
+
+
+
+    data.allocations.forEach(
+        allocation => {
+
+
+            html += `
+
+                <div class="allocation-row">
+
+                    <span>
+
+                        ${allocation.from}
+                        →
+                        ${allocation.to}
+
+                    </span>
+
+
+                    <strong>
+
+                        ${allocation.quantity}
+                        ${allocation.resource}
+
+                    </strong>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+
+    // ---------------------------------------------
+    // UNRESOLVED
+    // ---------------------------------------------
+
+    const unresolvedTotal =
+
+        data.unresolved.beds +
+        data.unresolved.doctors +
+        data.unresolved.nurses +
+        data.unresolved.ventilators;
+
+
+
+    if (unresolvedTotal > 0) {
+
+        html += `
+
+            <div class="recommendation">
+
+                <strong>
+
+                    ⚠️ Remaining Resource Gap
+
+                </strong>
+
+
+                Beds:
+                ${data.unresolved.beds}
+
+                <br>
+
+
+                Doctors:
+                ${data.unresolved.doctors}
+
+                <br>
+
+
+                Nurses:
+                ${data.unresolved.nurses}
+
+                <br>
+
+
+                Ventilators:
+                ${data.unresolved.ventilators}
+
+            </div>
+
+        `;
+
+    } else {
+
+        html += `
+
+            <div class="recommendation">
+
+                <strong>
+
+                    ✅ Resource Gap Resolved
+
+                </strong>
+
+
+                HELIOS found enough resources
+                in the available resource pools.
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+
+// =================================================
+// RESET HOSPITAL
+// =================================================
+
+async function resetHospital() {
+
+    try {
+
+
+        const response =
+            await fetch(
+                API + "/api/reset",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Reset API failed"
+            );
+
+        }
+
+
+        await response.json();
+
+
+        // -----------------------------------------
+        // REFRESH DASHBOARD
+        // -----------------------------------------
+
+        await loadDashboard();
+
+
+
+        // -----------------------------------------
+        // RESET DECISION CENTER
+        // -----------------------------------------
+
+        document.getElementById(
+            "decisionStatus"
+        ).innerHTML = `
+
+            <div class="status-row">
+
+                <span class="status-label">
+                    System Status
+                </span>
+
+                <span class="status-value">
+                    ✅ Hospital state reset
+                </span>
+
+            </div>
+
+        `;
+
+
+
+        document.getElementById(
+            "recommendations"
+        ).innerHTML = "";
+
+
+
+        // -----------------------------------------
+        // RESET COMPARISON
+        // -----------------------------------------
+
+        document.getElementById(
+            "comparison"
+        ).innerHTML = `
+
+            <div class="comparison-box">
+
+                <h3>
+
+                    Before Optimization
+
+                </h3>
+
+
+                <p>
+
+                    Run a scenario to see
+                    resource impact.
+
+                </p>
+
+            </div>
+
+
+            <div class="comparison-box">
+
+                <h3>
+
+                    After HELIOS Allocation
+
+                </h3>
+
+
+                <p>
+
+                    HELIOS recommendations
+                    will appear here.
+
+                </p>
+
+            </div>
+
+        `;
+
+
+
+        // -----------------------------------------
+        // RESET ALLOCATION FLOW
+        // -----------------------------------------
+
+        document.getElementById(
+            "allocationSummary"
+        ).innerHTML = `
+
+            <h3>
+
+                No allocation performed yet.
+
+            </h3>
+
+
+            <p>
+
+                Run a What-If Scenario to
+                calculate resource movement.
+
+            </p>
+
+        `;
+
+
+    } catch (error) {
+
+        console.error(
+            "Reset Error:",
+            error
+        );
+
+
+        alert(
+            "Reset failed."
+        );
+
+    }
+
+}
+
+
+
+// =================================================
+// START APPLICATION
+// =================================================
+
+loadDashboard();
+
+
+</script>
+
+
+</body>
+
+</html>
