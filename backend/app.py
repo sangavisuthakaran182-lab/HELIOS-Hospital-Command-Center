@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, request
+import os
+
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -56,12 +58,26 @@ resource_pools = {
 
 # =========================================================
 # HOME
+#
+# Serve the HELIOS frontend dashboard.
 # =========================================================
 
 @app.route("/")
 def home():
 
-    return "HELIOS Hospital Command Center is running!"
+    frontend_path = os.path.join(
+        os.path.dirname(
+            os.path.dirname(
+                os.path.abspath(__file__)
+            )
+        ),
+        "frontend"
+    )
+
+    return send_from_directory(
+        frontend_path,
+        "index.html"
+    )
 
 
 # =========================================================
@@ -72,8 +88,11 @@ def home():
 def dashboard():
 
     return jsonify({
+
         "hospital": hospital,
+
         "resource_pools": resource_pools
+
     })
 
 
@@ -104,8 +123,13 @@ def simulate():
     )
 
     return jsonify({
-        "message": "Emergency surge simulated",
-        "hospital": hospital
+
+        "message":
+            "Emergency surge simulated",
+
+        "hospital":
+            hospital
+
     })
 
 
@@ -120,45 +144,93 @@ def optimize():
 
     patients = hospital["emergency_patients"]
 
+
     if patients > 50:
 
         recommendations.append({
-            "from": "Resource Pool",
-            "to": "Emergency",
-            "resource": "Beds",
-            "quantity": 8
+
+            "from":
+                "Resource Pool",
+
+            "to":
+                "Emergency",
+
+            "resource":
+                "Beds",
+
+            "quantity":
+                8
+
         })
 
-        recommendations.append({
-            "from": "Resource Pool",
-            "to": "Emergency",
-            "resource": "Doctors",
-            "quantity": 2
-        })
 
         recommendations.append({
-            "from": "Resource Pool",
-            "to": "Emergency",
-            "resource": "Nurses",
-            "quantity": 4
+
+            "from":
+                "Resource Pool",
+
+            "to":
+                "Emergency",
+
+            "resource":
+                "Doctors",
+
+            "quantity":
+                2
+
         })
+
+
+        recommendations.append({
+
+            "from":
+                "Resource Pool",
+
+            "to":
+                "Emergency",
+
+            "resource":
+                "Nurses",
+
+            "quantity":
+                4
+
+        })
+
 
         status = "HIGH RESOURCE PRESSURE"
+
 
     else:
 
         recommendations.append({
-            "from": "System",
-            "to": "Emergency",
-            "resource": "Resources",
-            "quantity": 0
+
+            "from":
+                "System",
+
+            "to":
+                "Emergency",
+
+            "resource":
+                "Resources",
+
+            "quantity":
+                0
+
         })
+
 
         status = "NORMAL"
 
+
     return jsonify({
-        "status": status,
-        "recommendations": recommendations
+
+        "status":
+            status,
+
+        "recommendations":
+            recommendations
+
     })
 
 
@@ -171,12 +243,30 @@ def scenario():
 
     data = request.get_json()
 
-    patients = int(data.get("patients", 0))
-    arrivals = int(data.get("arrivals", 0))
-    beds = int(data.get("beds", 0))
-    doctors = int(data.get("doctors", 0))
-    nurses = int(data.get("nurses", 0))
-    ventilators = int(data.get("ventilators", 0))
+
+    patients = int(
+        data.get("patients", 0)
+    )
+
+    arrivals = int(
+        data.get("arrivals", 0)
+    )
+
+    beds = int(
+        data.get("beds", 0)
+    )
+
+    doctors = int(
+        data.get("doctors", 0)
+    )
+
+    nurses = int(
+        data.get("nurses", 0)
+    )
+
+    ventilators = int(
+        data.get("ventilators", 0)
+    )
 
 
     # =====================================================
@@ -188,15 +278,18 @@ def scenario():
         int(patients * 0.8)
     )
 
+
     required_doctors = max(
         2,
         int(patients / 15)
     )
 
+
     required_nurses = max(
         4,
         int(patients / 7)
     )
+
 
     required_ventilators = max(
         1,
@@ -213,15 +306,18 @@ def scenario():
         required_beds - beds
     )
 
+
     doctor_deficit = max(
         0,
         required_doctors - doctors
     )
 
+
     nurse_deficit = max(
         0,
         required_nurses - nurses
     )
+
 
     ventilator_deficit = max(
         0,
@@ -230,10 +326,12 @@ def scenario():
 
 
     total_deficit = (
+
         bed_deficit
         + doctor_deficit
         + nurse_deficit
         + ventilator_deficit
+
     )
 
 
@@ -245,9 +343,11 @@ def scenario():
 
         surge_status = "SURGE DETECTED"
 
+
     elif arrivals >= 12 or patients >= 45:
 
         surge_status = "MODERATE PRESSURE"
+
 
     else:
 
@@ -262,9 +362,11 @@ def scenario():
 
         resource_status = "RESOURCES SUFFICIENT"
 
+
     elif total_deficit <= 10:
 
         resource_status = "MINOR RESOURCE SHORTAGE"
+
 
     else:
 
@@ -277,55 +379,75 @@ def scenario():
 
     allocations = []
 
+
     remaining_beds = bed_deficit
+
     remaining_doctors = doctor_deficit
+
     remaining_nurses = nurse_deficit
 
 
     # -----------------------------------------------------
     # Sort departments according to available capacity
     #
-    # This means HELIOS examines the resource pools
-    # instead of blindly selecting one department.
+    # HELIOS examines the resource pools instead of
+    # blindly selecting one department.
     # -----------------------------------------------------
 
     departments = sorted(
+
         resource_pools.keys(),
+
         key=lambda department:
             resource_pools[department]["beds"],
+
         reverse=True
+
     )
 
 
-    # -----------------------------------------------------
+    # =====================================================
     # BED ALLOCATION
-    # -----------------------------------------------------
+    # =====================================================
 
     for department in departments:
 
         if remaining_beds <= 0:
+
             break
 
+
         available = resource_pools[
+
             department
+
         ]["beds"]
 
+
         allocation = min(
+
             available,
+
             remaining_beds
+
         )
+
 
         if allocation > 0:
 
             allocations.append({
 
-                "from": department,
+                "from":
+                    department,
 
-                "to": "Emergency",
+                "to":
+                    "Emergency",
 
-                "resource": "Beds",
+                "resource":
+                    "Beds",
 
-                "quantity": allocation,
+                "quantity":
+                    allocation,
 
                 "reason":
                     f"{department} has "
@@ -333,38 +455,52 @@ def scenario():
 
             })
 
+
             remaining_beds -= allocation
 
 
-    # -----------------------------------------------------
+    # =====================================================
     # DOCTOR ALLOCATION
-    # -----------------------------------------------------
+    # =====================================================
 
     for department in departments:
 
         if remaining_doctors <= 0:
+
             break
 
+
         available = resource_pools[
+
             department
+
         ]["doctors"]
 
+
         allocation = min(
+
             available,
+
             remaining_doctors
+
         )
+
 
         if allocation > 0:
 
             allocations.append({
 
-                "from": department,
+                "from":
+                    department,
 
-                "to": "Emergency",
+                "to":
+                    "Emergency",
 
-                "resource": "Doctors",
+                "resource":
+                    "Doctors",
 
-                "quantity": allocation,
+                "quantity":
+                    allocation,
 
                 "reason":
                     f"{department} has "
@@ -372,44 +508,59 @@ def scenario():
 
             })
 
+
             remaining_doctors -= allocation
 
 
-    # -----------------------------------------------------
+    # =====================================================
     # NURSE ALLOCATION
-    # -----------------------------------------------------
+    # =====================================================
 
     for department in departments:
 
         if remaining_nurses <= 0:
+
             break
 
+
         available = resource_pools[
+
             department
+
         ]["nurses"]
 
+
         allocation = min(
+
             available,
+
             remaining_nurses
+
         )
+
 
         if allocation > 0:
 
             allocations.append({
 
-                "from": department,
+                "from":
+                    department,
 
-                "to": "Emergency",
+                "to":
+                    "Emergency",
 
-                "resource": "Nurses",
+                "resource":
+                    "Nurses",
 
-                "quantity": allocation,
+                "quantity":
+                    allocation,
 
                 "reason":
                     f"{department} has "
                     f"{available} available nurses"
 
             })
+
 
             remaining_nurses -= allocation
 
@@ -420,13 +571,17 @@ def scenario():
 
     unresolved = {
 
-        "beds": remaining_beds,
+        "beds":
+            remaining_beds,
 
-        "doctors": remaining_doctors,
+        "doctors":
+            remaining_doctors,
 
-        "nurses": remaining_nurses,
+        "nurses":
+            remaining_nurses,
 
-        "ventilators": ventilator_deficit
+        "ventilators":
+            ventilator_deficit
 
     }
 
@@ -439,17 +594,23 @@ def scenario():
 
         "scenario": {
 
-            "patients": patients,
+            "patients":
+                patients,
 
-            "arrivals": arrivals,
+            "arrivals":
+                arrivals,
 
-            "beds": beds,
+            "beds":
+                beds,
 
-            "doctors": doctors,
+            "doctors":
+                doctors,
 
-            "nurses": nurses,
+            "nurses":
+                nurses,
 
-            "ventilators": ventilators
+            "ventilators":
+                ventilators
 
         },
 
@@ -518,23 +679,32 @@ def reset():
 
     hospital.update({
 
-        "beds": 120,
+        "beds":
+            120,
 
-        "doctors": 26,
+        "doctors":
+            26,
 
-        "nurses": 57,
+        "nurses":
+            57,
 
-        "ventilators": 18,
+        "ventilators":
+            18,
 
-        "emergency_patients": 35,
+        "emergency_patients":
+            35,
 
-        "emergency_arrivals": 8,
+        "emergency_arrivals":
+            8,
 
-        "emergency_beds": 10,
+        "emergency_beds":
+            10,
 
-        "emergency_doctors": 3,
+        "emergency_doctors":
+            3,
 
-        "emergency_nurses": 7
+        "emergency_nurses":
+            7
 
     })
 
@@ -560,6 +730,11 @@ def reset():
 if __name__ == "__main__":
 
     app.run(
-        debug=True,
-        port=5000
+
+        host="0.0.0.0",
+
+        port=5000,
+
+        debug=True
+
     )
